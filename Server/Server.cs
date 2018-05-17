@@ -35,6 +35,22 @@ namespace Server
             Console.WriteLine("Server started...");
 
             Socket clientSocket = serverSocket.Accept();
+
+            Console.WriteLine("Client connected...");
+
+            while (true)
+            {
+
+                try
+                {
+                    byte[] buffer = new byte[1024];
+                    int bytesRec = clientSocket.Receive(buffer);
+                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
+                    Console.WriteLine(data);
+                }
+                catch (Exception e) { }
+                
+            }
         }
     }
 }

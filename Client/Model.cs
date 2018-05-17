@@ -25,8 +25,12 @@ namespace Client
         }
 
         public void Send(string message) {
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
-            socket.Send(bytes);
+            try
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                int bytesSent = socket.Send(buffer);
+            }
+            catch (Exception e) { }
         }
 
     }
