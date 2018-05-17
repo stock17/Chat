@@ -12,11 +12,22 @@ namespace Server
 {
     public partial class ServerForm : Form
     {
+
+        Controller controller;
+
         public ServerForm()
         {
             InitializeComponent();
         }
 
-        
+        private void ServerForm_Load(object sender, EventArgs e)
+        {
+            controller = new Controller();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            controller.OnStartButton();
+        }
     }
 }
