@@ -11,11 +11,14 @@ namespace Server
 {
     class Server
     {
+        private List<ClientHandler> Clients = new List<ClientHandler>();
         private int port = 8000;
+        Thread thread;
+        
 
         public void Start()
         {
-            Thread thread = new Thread(Activate);
+            thread = new Thread(Activate);
             thread.Start();
         }
 
@@ -31,26 +34,15 @@ namespace Server
             IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
             serverSocket.Bind(ipPoint);
             serverSocket.Listen(10);
-
             Console.WriteLine("Server started...");
 
-            Socket clientSocket = serverSocket.Accept();
-
-            Console.WriteLine("Client connected...");
-
-            while (true)
-            {
-
-                try
-                {
-                    byte[] buffer = new byte[1024];
-                    int bytesRec = clientSocket.Receive(buffer);
-                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
-                    Console.WriteLine(data);
-                }
-                catch (Exception e) { }
-                
-            }
+            while (true) {
+                Socket clientSocket = serverSocket.Accept();
+                Console.WriteLine("Client connected...");
+                ClientHandler client = new ClientHandler(this, clientSocket);
+                Clients.Add(client);
+            }           
+           
         }
     }
 }

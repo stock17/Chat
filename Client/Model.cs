@@ -21,7 +21,6 @@ namespace Client
             IPEndPoint remotePoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
             socket.Connect(remotePoint);
             Console.WriteLine("Successful connection!");
-
         }
 
         public void Send(string message) {
