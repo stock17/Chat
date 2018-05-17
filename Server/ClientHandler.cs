@@ -38,5 +38,14 @@ namespace Server
             }
         }
 
+        public void Send(string message) {
+            try
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                int bytesSent = socket.Send(buffer);
+            }
+            catch (Exception e) { }
+        }
+
     }
 }

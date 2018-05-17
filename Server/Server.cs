@@ -13,13 +13,13 @@ namespace Server
     {
         private List<ClientHandler> Clients = new List<ClientHandler>();
         private int port = 8000;
-        Thread thread;
+        Thread serverThread;
         
 
         public void Start()
         {
-            thread = new Thread(Activate);
-            thread.Start();
+            serverThread = new Thread(Activate);
+            serverThread.Start();
         }
 
         public void Start(int portNumber)
@@ -38,11 +38,17 @@ namespace Server
 
             while (true) {
                 Socket clientSocket = serverSocket.Accept();
-                Console.WriteLine("Client connected...");
+                Console.WriteLine("New client connected...");
                 ClientHandler client = new ClientHandler(this, clientSocket);
                 Clients.Add(client);
             }           
            
+        }
+
+        public void SendAll(string message) {
+            foreach(ClientHandler ch in Clients){
+                ch.Send(message);
+            }
         }
     }
 }
