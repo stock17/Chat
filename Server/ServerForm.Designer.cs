@@ -32,7 +32,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.statusListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // button1
@@ -71,20 +71,21 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Порт";
             // 
-            // listView1
+            // statusListBox
             // 
-            this.listView1.Location = new System.Drawing.Point(12, 70);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(352, 108);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.statusListBox.FormattingEnabled = true;
+            this.statusListBox.Location = new System.Drawing.Point(15, 70);
+            this.statusListBox.Name = "statusListBox";
+            this.statusListBox.ScrollAlwaysVisible = true;
+            this.statusListBox.Size = new System.Drawing.Size(349, 108);
+            this.statusListBox.TabIndex = 4;
             // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(376, 190);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.statusListBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2);
@@ -104,7 +105,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListBox statusListBox;
     }
 }
 

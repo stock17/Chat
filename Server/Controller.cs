@@ -12,9 +12,9 @@ namespace Server
 
         private Server server;
      
-        public Controller()
+        public Controller(Server server)
         {
-            server = new Server();            
+            this.server = server;            
         }  
 
         public void OnStartButton()

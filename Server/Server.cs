@@ -13,6 +13,7 @@ namespace Server
     {
         private List<ClientHandler> Clients = new List<ClientHandler>();
         private int port = 8000;
+        private string ipaddress = "127.0.0.1";
         Thread serverThread;
         
 
@@ -20,6 +21,8 @@ namespace Server
         {
             serverThread = new Thread(Activate);
             serverThread.Start();
+
+            NotifyAll("Server starting...\n");
         }
 
         public void Start(int portNumber)
@@ -31,14 +34,14 @@ namespace Server
         public void Activate()
         {
             Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ipaddress), port);
             serverSocket.Bind(ipPoint);
             serverSocket.Listen(10);
-            Console.WriteLine("Server started...");
+            NotifyAll("Server is online.\n IP Adress: " + ipaddress + ". Port: " + port + "\n");
 
             while (true) {
                 Socket clientSocket = serverSocket.Accept();
-                Console.WriteLine("New client connected...");                              
+                NotifyAll("New client connected.");
 
                 ClientHandler client = new ClientHandler(this, clientSocket);
                 Clients.Add(client);                
@@ -49,6 +52,33 @@ namespace Server
         public void SendAll(string message) {
             foreach(ClientHandler ch in Clients){
                 ch.Send(message);
+            }
+        }
+
+        //========= Listeners ============//
+
+        public interface StatusListener
+        {
+            void Update(string message);
+        }
+
+        private List<StatusListener> listeners = new List<StatusListener>();
+
+        public void AddListener(StatusListener listener)
+        {
+            listeners.Add(listener);
+        }
+
+        public void RemoveListener(StatusListener listener)
+        {
+            listeners.Remove(listener);
+        }
+
+        public void NotifyAll(string newMessage)
+        {
+            foreach (StatusListener sl in listeners)
+            {
+                sl.Update(newMessage);
             }
         }
     }

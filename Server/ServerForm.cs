@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Server
 {
-    public partial class ServerForm : Form
+    public partial class ServerForm : Form, Server.StatusListener
     {
 
         Controller controller;
@@ -22,12 +22,23 @@ namespace Server
 
         private void ServerForm_Load(object sender, EventArgs e)
         {
-            controller = new Controller();
+            Server server = new Server();
+            server.AddListener(this);
+            controller = new Controller(server);
+            controller.OnStartButton();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             controller.OnStartButton();
+        }
+
+        public void Update(string message)
+        {
+            statusListBox.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                statusListBox.Items.Add(message + "\n");
+            });
         }
     }
 }
