@@ -57,6 +57,7 @@
             this.messageListBox.FormattingEnabled = true;
             this.messageListBox.Location = new System.Drawing.Point(13, 13);
             this.messageListBox.Name = "messageListBox";
+            this.messageListBox.ScrollAlwaysVisible = true;
             this.messageListBox.Size = new System.Drawing.Size(573, 303);
             this.messageListBox.TabIndex = 3;
             // 
@@ -64,12 +65,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 394);
+            this.ClientSize = new System.Drawing.Size(598, 431);
             this.Controls.Add(this.messageListBox);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.messageTextBox);
             this.Name = "ClientForm";
             this.Text = "Chat";
+            this.Load += new System.EventHandler(this.ClientForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -41,9 +41,7 @@ namespace Server
                 Console.WriteLine("New client connected...");                              
 
                 ClientHandler client = new ClientHandler(this, clientSocket);
-                Clients.Add(client);
-
-                SendAll("New client connected...");
+                Clients.Add(client);                
             }           
            
         }

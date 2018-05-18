@@ -11,25 +11,43 @@ namespace Client
 {
     class Model
     {
+        private string userName;
 
         private Socket socket;
         private int port = 8000;
         private byte[] buffer = new byte[256];
         private Thread listenThread;
+
+        private static string CONNECTION_ERROR = "Disconnected";
         
         
         public Model()
         {
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint remotePoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
             
-            // TODO: move to Connect method, use try-catch
-            socket.Connect(remotePoint);
-            Console.WriteLine("Successful connection!");
+        }
 
-            listenThread = new Thread(StartListening);
-            listenThread.Start();
-            //---------------------------------------
+        public void Connect(string userName)
+        {
+
+            this.userName = userName;            
+
+            try {
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint remotePoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+                                
+                socket.Connect(remotePoint);
+                Console.WriteLine("Successful connection!");
+
+                listenThread = new Thread(StartListening);
+                listenThread.Start();
+
+                Send("connected.");
+            }
+            catch
+            {
+                if (listenThread != null)
+                    listenThread.Abort();
+            }
         }
 
         private void StartListening()
@@ -56,8 +74,17 @@ namespace Client
         public void Send(string message) {
             try
             {
+                message = userName + ": " + message;
                 byte[] buffer = Encoding.UTF8.GetBytes(message);
-                int bytesSent = socket.Send(buffer);
+                if (socket.Connected)
+                {
+                    int bytesSent = socket.Send(buffer);
+                }
+                else
+                {
+                    NotifyAll(CONNECTION_ERROR);
+                }               
+
             }
             catch (Exception e) { }
         }

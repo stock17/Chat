@@ -19,7 +19,7 @@ namespace Client
             InitializeComponent();
             Model model = new Model();
             model.AddListener(this);
-            controller = new Controller(model);           
+            controller = new Controller(model);          
         }
         
         private void sendButton_Click(object sender, EventArgs e)
@@ -27,6 +27,7 @@ namespace Client
             string message = messageTextBox.Text.ToString();
             messageTextBox.Clear();
             controller.OnSendMessageButton(message);
+            messageTextBox.Focus();
         }
 
         public void Update(string message)
@@ -37,7 +38,18 @@ namespace Client
             });            
         }
 
-      
-        
+        private void ClientForm_Load(object sender, EventArgs e)
+        {
+            LoginForm loginForm = new LoginForm();
+            loginForm.ShowDialog();
+            if (loginForm.DialogResult == DialogResult.OK)
+            {
+                string user = loginForm.UserName;
+                controller.OnConnectButton(user);
+            } else
+            {
+                Close();
+            }
+        }
     }
 }

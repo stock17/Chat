@@ -19,5 +19,9 @@ namespace Client
             model.Send(message);
         }
 
+        public void OnConnectButton(string userName) {
+            model.Connect(userName);
+        }
+
     }
 }
