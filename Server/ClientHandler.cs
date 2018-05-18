@@ -30,6 +30,7 @@ namespace Server
                     int bytesRec = socket.Receive(buffer);
                     string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
                     Console.WriteLine(data);
+                    server.SendAll(data);
                 }
                 catch (Exception e)
                 {
@@ -42,7 +43,7 @@ namespace Server
             try
             {
                 byte[] buffer = Encoding.UTF8.GetBytes(message);
-                int bytesSent = socket.Send(buffer);
+                int bytesSent = socket.Send(buffer);                
             }
             catch (Exception e) { }
         }

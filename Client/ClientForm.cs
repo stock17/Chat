@@ -10,20 +10,33 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class ClientForm : Form
+    public partial class ClientForm : Form, Model.MessageListener
     {
         private Controller controller;
 
         public ClientForm()
         {
             InitializeComponent();
-            controller = new Controller();            
+            Model model = new Model();
+            model.AddListener(this);
+            controller = new Controller(model);           
         }
-
+        
         private void sendButton_Click(object sender, EventArgs e)
         {
             string message = messageTextBox.Text.ToString();
             controller.OnSendMessageButton(message);
         }
+
+        public void Update(string message)
+        {            
+            messageListBox.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                messageListBox.Items.Add(message + "\n");
+            });            
+        }
+
+      
+        
     }
 }

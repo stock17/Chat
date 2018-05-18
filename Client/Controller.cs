@@ -10,9 +10,9 @@ namespace Client
     {
         Model model;
 
-        public Controller()
+        public Controller(Model model)
         {
-            model = new Model();
+            this.model = model;
         }
 
         public void OnSendMessageButton(string message) {
