@@ -25,6 +25,7 @@ namespace Client
         private void sendButton_Click(object sender, EventArgs e)
         {
             string message = messageTextBox.Text.ToString();
+            messageTextBox.Clear();
             controller.OnSendMessageButton(message);
         }
 

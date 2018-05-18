@@ -38,13 +38,12 @@ namespace Server
 
             while (true) {
                 Socket clientSocket = serverSocket.Accept();
-                Console.WriteLine("New client connected...");
-
-                byte[] buffer = Encoding.UTF8.GetBytes("New client connected...");
-                int bytesSent = clientSocket.Send(buffer);
+                Console.WriteLine("New client connected...");                              
 
                 ClientHandler client = new ClientHandler(this, clientSocket);
                 Clients.Add(client);
+
+                SendAll("New client connected...");
             }           
            
         }
