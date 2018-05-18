@@ -43,16 +43,19 @@ namespace Server
             //serverSocket.Shutdown(SocketShutdown.Both);
             serverSocket.Close();
             NotifyAll("Conection is closed");
-
             NotifyAll("Server thread is stopped");
-            
-            
+
+            foreach (ClientHandler ch in Clients) {
+                ch.Send("Server shut down");
+                ch.Stop();
+            }
+
             Clients.Clear();
         }
 
         public void Activate()
         {
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);            
             IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ipaddress), port);
             serverSocket.Bind(ipPoint);
             serverSocket.Listen(10);

@@ -48,5 +48,11 @@ namespace Server
             catch (Exception e) { }
         }
 
+        public void Stop()
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+        }
+
     }
 }
