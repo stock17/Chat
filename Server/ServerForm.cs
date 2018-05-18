@@ -40,5 +40,10 @@ namespace Server
                 statusListBox.Items.Add(message + "\n");
             });
         }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            controller.OnStopButton();
+        }
     }
 }

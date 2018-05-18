@@ -21,5 +21,10 @@ namespace Server
         {            
             server.Start();
         }
+
+        public void OnStopButton()
+        {
+            server.Stop();
+        }
     }
 }

@@ -15,14 +15,20 @@ namespace Server
         private int port = 8000;
         private string ipaddress = "127.0.0.1";
         Thread serverThread;
-        
+        Socket serverSocket;
+
+
 
         public void Start()
         {
-            serverThread = new Thread(Activate);
-            serverThread.Start();
+            try
+            {
+                serverThread = new Thread(Activate);
+                serverThread.Start();
 
-            NotifyAll("Server starting...\n");
+                NotifyAll("Server starting...\n");
+            }
+            catch { }
         }
 
         public void Start(int portNumber)
@@ -31,21 +37,41 @@ namespace Server
             Start();
         }
 
+        public void Stop()
+        {
+            NotifyAll("Server is stopping...");
+            //serverSocket.Shutdown(SocketShutdown.Both);
+            serverSocket.Close();
+            NotifyAll("Conection is closed");
+
+            NotifyAll("Server thread is stopped");
+            
+            
+            Clients.Clear();
+        }
+
         public void Activate()
         {
-            Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ipaddress), port);
             serverSocket.Bind(ipPoint);
             serverSocket.Listen(10);
-            NotifyAll("Server is online.\n IP Adress: " + ipaddress + ". Port: " + port + "\n");
+            NotifyAll("Server is online.\n IP Adress: " + ipaddress + ". Port: " + port);
 
-            while (true) {
-                Socket clientSocket = serverSocket.Accept();
-                NotifyAll("New client connected.");
+            try
+            {
+                while (true)
+                {
+                    Socket clientSocket = serverSocket.Accept();
+                    NotifyAll("New client connected.");
 
-                ClientHandler client = new ClientHandler(this, clientSocket);
-                Clients.Add(client);                
-            }           
+                    ClientHandler client = new ClientHandler(this, clientSocket);
+                    Clients.Add(client);
+                }
+            } catch
+            {
+                NotifyAll("Connection break");
+            }      
            
         }
 
