@@ -60,8 +60,9 @@ namespace Client
                 {
                     byte[] buffer = new byte[1024];
                     int bytesRec = socket.Receive(buffer);
-                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);                    
-                    NotifyAll(data);
+                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
+                    Message msg = Message.Parse(data);
+                    NotifyAll(msg.From + ": " + msg.Data);
                 }
                 catch (Exception e)
                 {

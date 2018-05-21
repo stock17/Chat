@@ -45,7 +45,7 @@ namespace Server
             NotifyAll("Server thread is stopped");
 
             foreach (ClientHandler ch in Clients) {
-                ch.Send("Server shut down");
+                ch.Send(new Message("Server shut down", "Server"));
                 ch.Stop();
             }
 
@@ -73,7 +73,7 @@ namespace Server
                     string user = message.From;                        
                     Console.WriteLine(message.Data);
 
-                    SendAll(user + " connected");
+                    SendAll(new Message(user + " connected", "Server"));
                     NotifyAll(user + " connected");
 
                     ClientHandler client = new ClientHandler(this, clientSocket, user);
@@ -86,7 +86,7 @@ namespace Server
            
         }
 
-        public void SendAll(string message) {
+        public void SendAll(Message message) {
             foreach(ClientHandler ch in Clients){
                 ch.Send(message);
             }
