@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Server;
+
 
 namespace Client
 {
@@ -41,7 +43,7 @@ namespace Client
                 listenThread = new Thread(StartListening);
                 listenThread.Start();
 
-                Send("connected.", false, false); // TODO: remake to service message
+                Send("connected."); // TODO: remake to service message
             }
             catch
             {
@@ -68,11 +70,11 @@ namespace Client
             }
         }
 
-        public void Send(string message, bool isService, bool isPrivate) {
+        public void Send(string message) {
             try
             {
                 message = userName + ": " + message;
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                byte[] buffer = Encoding.UTF8.GetBytes(new Message(message).ToString());
                 if (socket.Connected)
                 {
                     int bytesSent = socket.Send(buffer);

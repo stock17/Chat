@@ -29,8 +29,9 @@ namespace Server
                     byte[] buffer = new byte[1024];
                     int bytesRec = socket.Receive(buffer);
                     string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
-                    Console.WriteLine(data);
-                    server.SendAll(data);
+                    Message message = Message.Parse(data);
+                    Console.WriteLine(message.data);
+                    server.SendAll(message.data);
                 }
                 catch (Exception e)
                 {
