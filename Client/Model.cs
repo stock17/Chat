@@ -41,7 +41,7 @@ namespace Client
                 listenThread = new Thread(StartListening);
                 listenThread.Start();
 
-                Send("connected.");
+                Send("connected.", false, false); // TODO: remake to service message
             }
             catch
             {
@@ -58,11 +58,8 @@ namespace Client
                 {
                     byte[] buffer = new byte[1024];
                     int bytesRec = socket.Receive(buffer);
-                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
-                    //Console.WriteLine(data);
-                    // TODO: send message to Form
+                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);                    
                     NotifyAll(data);
-
                 }
                 catch (Exception e)
                 {
@@ -71,7 +68,7 @@ namespace Client
             }
         }
 
-        public void Send(string message) {
+        public void Send(string message, bool isService, bool isPrivate) {
             try
             {
                 message = userName + ": " + message;

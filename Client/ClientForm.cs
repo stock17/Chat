@@ -26,7 +26,8 @@ namespace Client
         {
             string message = messageTextBox.Text.ToString();
             messageTextBox.Clear();
-            controller.OnSendMessageButton(message);
+            controller.OnSendMessageButton(message, false); // TODO : to handle private messages
+            // may be it's neccesary to make the 2nd parameter like receiver's name. It'll be private message
             messageTextBox.Focus();
         }
 

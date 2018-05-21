@@ -9,6 +9,12 @@ namespace Server
     class Message
     {
         private static string Delimiter = "@^";
+        
+        private static bool ServiceType = true;
+        private static bool TextType = false;
+
+        private static bool PrivateMessage = true;
+        private static bool PublicMessage = false;
 
         private bool serviceType; // 1 - service, 0 - text
         bool IsService() { return serviceType; }
