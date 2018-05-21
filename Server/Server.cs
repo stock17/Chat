@@ -39,8 +39,7 @@ namespace Server
 
         public void Stop()
         {
-            NotifyAll("Server is stopping...");
-            //serverSocket.Shutdown(SocketShutdown.Both);
+            NotifyAll("Server is stopping...");            
             serverSocket.Close();
             NotifyAll("Conection is closed");
             NotifyAll("Server thread is stopped");

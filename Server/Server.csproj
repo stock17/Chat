@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ClientHandler.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerForm.cs">
       <SubType>Form</SubType>
