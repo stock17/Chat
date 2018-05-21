@@ -14,6 +14,8 @@ namespace Server
         private Socket socket;
         private Thread listenThread;
         private Server server;
+
+        public string User { get { return userName; } }
         
 
         public ClientHandler(Server server, Socket clientSocket, string user) {
@@ -21,7 +23,7 @@ namespace Server
             this.server = server;
             this.userName = user;
             listenThread = new Thread(StartListening);
-            listenThread.Start();
+            listenThread.Start();            
         }
 
         private void StartListening() {

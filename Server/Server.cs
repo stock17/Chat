@@ -11,6 +11,8 @@ namespace Server
 {
     class Server
     {
+        public const string SERVER_NAME = "Server";
+
         private List<ClientHandler> Clients = new List<ClientHandler>();
         private int port = 8000;
         private string ipaddress = "127.0.0.1";
@@ -73,11 +75,13 @@ namespace Server
                     string user = message.From;                        
                     Console.WriteLine(message.Data);
 
+                    ClientHandler client = new ClientHandler(this, clientSocket, user);
+                    Clients.Add(client);
+
                     SendAll(new Message(user + " connected", "Server"));
                     NotifyAll(user + " connected");
 
-                    ClientHandler client = new ClientHandler(this, clientSocket, user);
-                    Clients.Add(client);
+                    SendUserList();
                 }
             } catch
             {
@@ -91,6 +95,19 @@ namespace Server
                 ch.Send(message);
             }
         }
+
+        public void SendUserList()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach(ClientHandler ch in Clients)
+            {
+                builder.Append(Message.UserDelimiter).Append(ch.User);
+            }
+            builder.Remove(0, 1); // remove first delimiter
+            Message userMessage = new Message(builder.ToString(), SERVER_NAME);
+            userMessage.MessageType = Message.Type.USER_LIST;
+            SendAll(userMessage);
+        }               
 
         //========= Listeners ============//
 

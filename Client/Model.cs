@@ -19,10 +19,11 @@ namespace Client
         private int port = 8000;
         private byte[] buffer = new byte[256];
         private Thread listenThread;
+        private List<string> users = new List<string>();
 
         private static string CONNECTION_ERROR = "Disconnected";
-        
-        
+
+                
         public Model()
         {
             
@@ -62,7 +63,17 @@ namespace Client
                     int bytesRec = socket.Receive(buffer);
                     string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
                     Message msg = Message.Parse(data);
-                    NotifyAll(msg.From + ": " + msg.Data);
+
+                    switch (msg.MessageType)  {
+
+                        case Message.Type.USUAL_MESSAGE:
+                            NotifyAll(msg.From + ": " + msg.Data);
+                            break;
+                        case Message.Type.USER_LIST:
+                            users = ExtractUsers(msg);
+                            NotifyAll(users);
+                            break;
+                    }                    
                 }
                 catch (Exception e)
                 {
@@ -89,11 +100,22 @@ namespace Client
             catch (Exception e) { }
         }
 
+        public List<string> ExtractUsers (Message message)
+        {
+            if (message.MessageType != Message.Type.USER_LIST)
+                throw new FormatException();
+
+            List<string> result = new List<string>();
+            result = message.Data.Split(Message.UserDelimiter).ToList();
+            return result;
+        }
+
         //========= Listeners ============//
 
         public interface MessageListener
         {
-           void  Update(string message);
+            void  Update(string message);
+            void Update(List<string> users);
         }
 
         private List<MessageListener> listeners = new List<MessageListener>();
@@ -111,8 +133,15 @@ namespace Client
         public void NotifyAll(string newMessage)
         {
             foreach (MessageListener ml in listeners) {
-                ml.Update(newMessage);
-                
+                ml.Update(newMessage);                
+            }
+        }
+
+        public void NotifyAll(List<string> users)
+        {
+            foreach (MessageListener ml in listeners)
+            {
+                ml.Update(users);
             }
         }
 

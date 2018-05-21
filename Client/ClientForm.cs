@@ -39,6 +39,19 @@ namespace Client
             });            
         }
 
+        public void Update(List<string> users)
+        {
+            usersListBox.Invoke((MethodInvoker)delegate {
+                // Running on the UI thread
+                usersListBox.Items.Clear();
+                foreach (String user in users)
+                {
+                    usersListBox.Items.Add(user + "\n");
+                }
+                
+            });
+        }
+
         private void ClientForm_Load(object sender, EventArgs e)
         {
             LoginForm loginForm = new LoginForm();
