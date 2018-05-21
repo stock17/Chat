@@ -65,9 +65,18 @@ namespace Server
                 while (true)
                 {
                     Socket clientSocket = serverSocket.Accept();
-                    NotifyAll("New client connected.");
 
-                    ClientHandler client = new ClientHandler(this, clientSocket);
+                    byte[] buffer = new byte[1024];
+                    int bytesRec = clientSocket.Receive(buffer);
+                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
+                    Message message = Message.Parse(data);
+                    string user = message.From;                        
+                    Console.WriteLine(message.Data);
+
+                    SendAll(user + " connected");
+                    NotifyAll(user + " connected");
+
+                    ClientHandler client = new ClientHandler(this, clientSocket, user);
                     Clients.Add(client);
                 }
             } catch

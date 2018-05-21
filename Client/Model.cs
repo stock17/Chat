@@ -73,8 +73,8 @@ namespace Client
         public void Send(string message) {
             try
             {
-                message = userName + ": " + message;
-                byte[] buffer = Encoding.UTF8.GetBytes(new Message(message).ToString());
+                Console.WriteLine(new Message(message, userName).ToString());
+                byte[] buffer = Encoding.UTF8.GetBytes(new Message(message, userName).ToString());
                 if (socket.Connected)
                 {
                     int bytesSent = socket.Send(buffer);

@@ -10,13 +10,16 @@ namespace Server
 {
     class ClientHandler
     {
+        private string userName;
         private Socket socket;
         private Thread listenThread;
         private Server server;
+        
 
-        public ClientHandler(Server server, Socket clientSocket) {
+        public ClientHandler(Server server, Socket clientSocket, string user) {
             this.socket = clientSocket;
             this.server = server;
+            this.userName = user;
             listenThread = new Thread(StartListening);
             listenThread.Start();
         }
@@ -30,8 +33,8 @@ namespace Server
                     int bytesRec = socket.Receive(buffer);
                     string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
                     Message message = Message.Parse(data);
-                    Console.WriteLine(message.data);
-                    server.SendAll(message.data);
+                    Console.WriteLine(message.Data);
+                    server.SendAll(message.Data);
                 }
                 catch (Exception e)
                 {

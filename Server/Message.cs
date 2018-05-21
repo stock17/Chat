@@ -11,38 +11,50 @@ namespace Server
         private static string Delimiter = "@^";
         
         private string nameTo;
-        string To { get { return nameTo; } }
+        public string To { get { return nameTo; } }
 
-        public string data;
-        string Data { set; get; }
+        private string nameFrom;
+        public string From { get { return nameFrom; } }
 
-        public Message(string to, string data) {                    
-            this.nameTo = to;
-            this.data = data;
+        private string data;
+        public string Data
+        {
+            set { data = value; }
+            get { return data;   }
         }
 
-        public Message(string data)
+        public Message(string data, string from, string to) : this(data, from) {                    
+            this.nameTo = to;            
+        }
+
+        public Message(string data, string nameFrom)
         {            
             this.data = data;
+            this.nameFrom = nameFrom;
         }
 
         override public string ToString() {
             StringBuilder builder = new StringBuilder();            
-            builder.Append(data).Append(Delimiter); 
-            builder.Append(nameTo);
+            builder.Append(data);
+            builder.Append(Delimiter).Append(nameFrom);
+            if (!String.IsNullOrEmpty(nameTo)) {
+                builder.Append(Delimiter).Append(nameTo);
+            }
+            
             return builder.ToString();
         }
 
         public static Message Parse(string dataString) {
             try
             {
-                string[] parts = dataString.Split(new[] { Delimiter }, StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = dataString.Split(new[] { Delimiter }, StringSplitOptions.None);
                 string data = parts[0];
-                if (parts.Length > 1) {
-                    string to = parts[1];
-                    return new Message(to, data);
+                string from = parts[1];
+                if (parts.Length > 2) {
+                    string to = parts[2];
+                    return new Message(data, from, to);
                 } else
-                    return new Message(data);
+                    return new Message(data, from);
             }
             catch (Exception e)
             {
