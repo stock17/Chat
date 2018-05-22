@@ -96,6 +96,23 @@ namespace Server
             }
         }
 
+        public void SendPrivate(Message message)
+        {
+            SendOne(message, message.To);
+            SendOne(message, message.From);            
+        }
+
+        public void SendOne(Message message, string user) {            
+            var users = from c in Clients
+                          where c.User.ToLower().Equals(user.ToLower())
+                          select c;
+
+            foreach (ClientHandler ch in users)
+            {
+                ch.Send(message);
+            }
+        }
+
         public void SendUserList()
         {
             StringBuilder builder = new StringBuilder();

@@ -69,6 +69,7 @@
             this.usersListBox.Name = "usersListBox";
             this.usersListBox.Size = new System.Drawing.Size(120, 368);
             this.usersListBox.TabIndex = 4;
+            this.usersListBox.DoubleClick += new System.EventHandler(this.usersListBox_DoubleClick);
             // 
             // ClientForm
             // 
@@ -79,6 +80,7 @@
             this.Controls.Add(this.messageListBox);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.messageTextBox);
+            this.MaximizeBox = false;
             this.Name = "ClientForm";
             this.Text = "Chat";
             this.Load += new System.EventHandler(this.ClientForm_Load);

@@ -44,7 +44,7 @@ namespace Client
                 listenThread = new Thread(StartListening);
                 listenThread.Start();
 
-                Send("connected."); // TODO: remake to service message
+                Send("connected.");
             }
             catch
             {
@@ -73,6 +73,9 @@ namespace Client
                             users = ExtractUsers(msg);
                             NotifyAll(users);
                             break;
+                        case Message.Type.PRIVATE_MESSAGE:
+                            NotifyAll("private: " + msg.From + ": " + msg.Data);
+                            break;
                     }                    
                 }
                 catch (Exception e)
@@ -83,19 +86,30 @@ namespace Client
         }
 
         public void Send(string message) {
+            Send(message, null);            
+        }
+
+        public void Send(string text, string receiver)
+        {
+            if (!socket.Connected) {
+                NotifyAll(CONNECTION_ERROR);
+                return;
+            }
+
             try
             {
-                Console.WriteLine(new Message(message, userName).ToString());
-                byte[] buffer = Encoding.UTF8.GetBytes(new Message(message, userName).ToString());
-                if (socket.Connected)
-                {
-                    int bytesSent = socket.Send(buffer);
+                Message message;
+                if (receiver != null) {
+                    message = new Message(text, userName, receiver);
+                    message.MessageType = Message.Type.PRIVATE_MESSAGE;
                 }
                 else
                 {
-                    NotifyAll(CONNECTION_ERROR);
-                }               
-
+                    message = new Message(text, userName);
+                }
+                
+                byte[] buffer = Encoding.UTF8.GetBytes(message.ToString());
+                int bytesSent = socket.Send(buffer);
             }
             catch (Exception e) { }
         }
@@ -105,9 +119,7 @@ namespace Client
             if (message.MessageType != Message.Type.USER_LIST)
                 throw new FormatException();
 
-            List<string> result = new List<string>();
-            result = message.Data.Split(Message.UserDelimiter).ToList();
-            return result;
+            return  message.Data.Split(Message.UserDelimiter).ToList();                        
         }
 
         //========= Listeners ============//

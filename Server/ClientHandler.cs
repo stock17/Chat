@@ -36,7 +36,17 @@ namespace Server
                     string data = Encoding.UTF8.GetString(buffer, 0, bytesRec);
                     Message message = Message.Parse(data);
                     Console.WriteLine(message.Data);
-                    server.SendAll(message);
+
+                    switch (message.MessageType) {
+                        case Message.Type.USUAL_MESSAGE:
+                            server.SendAll(message);
+                            break;
+                        case Message.Type.PRIVATE_MESSAGE:
+                            server.SendPrivate(message);
+                            break;
+                    }
+
+                    
                 }
                 catch (Exception e)
                 {

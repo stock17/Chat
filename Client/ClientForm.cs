@@ -13,6 +13,7 @@ namespace Client
     public partial class ClientForm : Form, Model.MessageListener
     {
         private Controller controller;
+        private string privateReceiver;
 
         public ClientForm()
         {
@@ -26,8 +27,13 @@ namespace Client
         {
             string message = messageTextBox.Text.ToString();
             messageTextBox.Clear();
-            controller.OnSendMessageButton(message); // TODO : to handle private messages
-            // may be it's neccesary to make the 2nd parameter like receiver's name. It'll be private message
+            if (message.StartsWith("private to")){
+                int i = message.IndexOf(':');
+                string text = message.Substring(i + 1);
+                controller.OnSendPrivateMessageButton(text, privateReceiver); 
+            } else {
+                controller.OnSendMessageButton(message);
+            }            
             messageTextBox.Focus();
         }
 
@@ -35,7 +41,7 @@ namespace Client
         {            
             messageListBox.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
-                messageListBox.Items.Add(message + "\n");
+                messageListBox.Items.Add(message);
             });            
         }
 
@@ -46,7 +52,7 @@ namespace Client
                 usersListBox.Items.Clear();
                 foreach (String user in users)
                 {
-                    usersListBox.Items.Add(user + "\n");
+                    usersListBox.Items.Add(user);
                 }
                 
             });
@@ -65,6 +71,15 @@ namespace Client
             {
                 Close();
             }
+        }
+
+        private void usersListBox_DoubleClick(object sender, EventArgs e)
+        {
+            string user = usersListBox.GetItemText(usersListBox.SelectedItem);
+            privateReceiver = user;
+            messageTextBox.Text = "private to '" + user + "' : ";
+            messageTextBox.Focus();
+            messageTextBox.SelectionStart = messageTextBox.Text.Length;
         }
     }
 }

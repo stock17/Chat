@@ -15,8 +15,13 @@ namespace Client
             this.model = model;
         }
 
-        public void OnSendMessageButton(string message) {
+        public void OnSendMessageButton(string message) {            
             model.Send(message);
+        }
+
+        public void OnSendPrivateMessageButton(string message, string receiver)
+        {
+            model.Send(message, receiver);
         }
 
         public void OnConnectButton(string userName) {
