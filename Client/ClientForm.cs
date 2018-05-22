@@ -59,6 +59,7 @@ namespace Client
             if (loginForm.DialogResult == DialogResult.OK)
             {
                 string user = loginForm.UserName;
+                this.Text += " - " + user;
                 controller.OnConnectButton(user);
             } else
             {
