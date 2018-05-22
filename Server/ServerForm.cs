@@ -37,13 +37,19 @@ namespace Server
         {
             statusListBox.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
-                statusListBox.Items.Add(message + "\n");
+                statusListBox.Items.Add(message);
+                statusListBox.TopIndex = statusListBox.Items.Count - 1;
             });
         }
 
         private void stopButton_Click(object sender, EventArgs e)
         {
             controller.OnStopButton();
+        }
+
+        private void statusListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -19,10 +19,17 @@ namespace Server
         Thread serverThread;
         Socket serverSocket;
 
+        private bool running = false;
+
 
 
         public void Start()
-        {
+        {            
+            if (running) {
+                NotifyAll("Server is running...\n");
+                return;
+            }                
+            
             try
             {
                 serverThread = new Thread(Activate);
@@ -41,8 +48,9 @@ namespace Server
 
         public void Stop()
         {
+            
             NotifyAll("Server is stopping...");            
-            serverSocket.Close();
+            serverSocket.Close();            
             NotifyAll("Conection is closed");
             NotifyAll("Server thread is stopped");
 
@@ -52,6 +60,8 @@ namespace Server
             }
 
             Clients.Clear();
+
+            running = false;
         }
 
         public void Activate()
@@ -61,6 +71,7 @@ namespace Server
             serverSocket.Bind(ipPoint);
             serverSocket.Listen(10);
             NotifyAll("Server is online.\n IP Adress: " + ipaddress + ". Port: " + port);
+            running = true;
 
             try
             {

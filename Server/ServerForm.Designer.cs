@@ -80,6 +80,7 @@
             this.statusListBox.ScrollAlwaysVisible = true;
             this.statusListBox.Size = new System.Drawing.Size(349, 108);
             this.statusListBox.TabIndex = 4;
+            this.statusListBox.SelectedIndexChanged += new System.EventHandler(this.statusListBox_SelectedIndexChanged);
             // 
             // ServerForm
             // 
