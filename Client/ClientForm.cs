@@ -42,6 +42,7 @@ namespace Client
             messageListBox.Invoke((MethodInvoker)delegate {
                 // Running on the UI thread
                 messageListBox.Items.Add(message);
+                messageListBox.TopIndex = messageListBox.Items.Count - 1;
             });            
         }
 

@@ -46,10 +46,11 @@ namespace Server
         {
             controller.OnStopButton();
         }
+              
 
-        private void statusListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void ServerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            controller.OnStopButton();
         }
     }
 }

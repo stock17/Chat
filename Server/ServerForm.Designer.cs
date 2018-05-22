@@ -79,8 +79,7 @@
             this.statusListBox.Name = "statusListBox";
             this.statusListBox.ScrollAlwaysVisible = true;
             this.statusListBox.Size = new System.Drawing.Size(349, 108);
-            this.statusListBox.TabIndex = 4;
-            this.statusListBox.SelectedIndexChanged += new System.EventHandler(this.statusListBox_SelectedIndexChanged);
+            this.statusListBox.TabIndex = 4;          
             // 
             // ServerForm
             // 
@@ -95,6 +94,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ServerForm";
             this.Text = "Server";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ServerForm_FormClosing);
             this.Load += new System.EventHandler(this.ServerForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
