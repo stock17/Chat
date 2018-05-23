@@ -17,10 +17,7 @@ namespace Client
 
         public ClientForm()
         {
-            InitializeComponent();
-            Model model = new Model();
-            model.AddListener(this);
-            controller = new Controller(model);          
+            InitializeComponent();            
         }
         
         private void sendButton_Click(object sender, EventArgs e)
@@ -66,8 +63,11 @@ namespace Client
             if (loginForm.DialogResult == DialogResult.OK)
             {
                 string user = loginForm.UserName;
+                Model model = new Model(user);
+                model.AddListener(this);
+                controller = new Controller(model);
                 this.Text += " - " + user;
-                controller.OnConnectButton(user);
+                controller.OnConnectButton();
             } else
             {
                 Close();

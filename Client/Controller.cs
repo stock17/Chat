@@ -24,8 +24,8 @@ namespace Client
             model.Send(message, receiver);
         }
 
-        public void OnConnectButton(string userName) {
-            model.Connect(userName);
+        public void OnConnectButton() {
+            model.Connect();
         }
 
     }

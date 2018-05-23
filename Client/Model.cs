@@ -13,6 +13,8 @@ namespace Client
 {
     class Model
     {
+              
+
         private string userName;
 
         private Socket socket;
@@ -21,19 +23,17 @@ namespace Client
         private Thread listenThread;
         private List<string> users = new List<string>();
 
-        private static string CONNECTION_ERROR = "Disconnected";
+        private bool isConnected = false;
+        private static string CONNECTION_ERROR = "Server is offline...";
 
                 
-        public Model()
+        public Model(string userName)
         {
-            
+            this.userName = userName;
         }
 
-        public void Connect(string userName)
-        {
-
-            this.userName = userName;            
-
+        public bool Connect()
+        {                    
             try {
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint remotePoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
@@ -44,13 +44,18 @@ namespace Client
                 listenThread = new Thread(StartListening);
                 listenThread.Start();
 
+                isConnected = true;
                 Send("connected.");
+
+                return true;
             }
             catch
             {
                 if (listenThread != null)
                     listenThread.Abort();
             }
+
+            return false;
         }
 
         private void StartListening()
@@ -74,7 +79,7 @@ namespace Client
                             NotifyAll(users);
                             break;
                         case Message.Type.PRIVATE_MESSAGE:
-                            NotifyAll("private: " + msg.From + ": " + msg.Data);
+                            NotifyAll("private from " + msg.From + ": " + msg.Data);
                             break;
                     }                    
                 }
@@ -91,11 +96,11 @@ namespace Client
 
         public void Send(string text, string receiver)
         {
-            if (!socket.Connected) {
+            if (!socket.Connected && !Connect()) {
                 NotifyAll(CONNECTION_ERROR);
                 return;
             }
-
+                        
             try
             {
                 Message message;
