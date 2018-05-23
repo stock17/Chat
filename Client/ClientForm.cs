@@ -82,5 +82,13 @@ namespace Client
             messageTextBox.Focus();
             messageTextBox.SelectionStart = messageTextBox.Text.Length;
         }
+
+        private void messageTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                sendButton_Click(sender, e);
+            }
+        }
     }
 }

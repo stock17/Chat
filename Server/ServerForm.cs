@@ -26,6 +26,7 @@ namespace Server
             server.AddListener(this);
             controller = new Controller(server);
             controller.OnStartButton();
+            this.WindowState = FormWindowState.Minimized;
         }
 
         private void button1_Click(object sender, EventArgs e)
